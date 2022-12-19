@@ -16,5 +16,13 @@ Assets {
       VirtualFolderPath: "Loot Drop Factory"
       PlatformAssetType: 13
     }
+    Folders {
+      VirtualFolderPath: "Hierarchy"
+      PlatformAssetType: 5
+    }
+    Folders {
+      VirtualFolderPath: "Social Elements"
+      PlatformAssetType: 5
+    }
   }
 }
