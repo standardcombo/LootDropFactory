@@ -44,14 +44,16 @@
 	===
 	- Drop(table eventData)
 		Called to drop a treasure.
-	- RegisterEncounter(table NPCs, string lootDropId)
+	- RegisterEncounter(table NPCs, string lootDropId [,int level])
 		Sets up an encounter of many NPCs that drop a single treasure.
+		Optional level parameter can be used to scale rewards for the encounter.
 	
 	
 	Event Data - schema
 	==========
 	{
 		lootId = string row in the LDFactory metadata table
+		level = (optional) number representing the drop's difficulty or rating
 		object = (optional) Damageable Object
 		killer = (optional) Damageable/Player
 		position = Where to spawn the drop
@@ -59,6 +61,23 @@
 		resourceType = (optional) Basic XP/coin reward, using Resources system
 		resourceAmount = (optional) Basic XP/coin reward, using Resources system
 	}
+	
+	
+	Loot Drop Redirection
+	=====================
+	"LootID(string)"
+	By using the above instruction in a subTable's reward entry, it's possible
+	to redirect to an entirely different drop. The value in parentesis is the id
+	in the metadata table. For an example use case, see the "Random" table.
+	
+	
+	Level
+	=====
+	Subtables support an optional column named `incidencePerLevel`. If this is
+	added to the table and the drop was given a level number, then the incidence
+	for each entry will be calculated as:
+		incidence = base incidence + level * incidencePerLevel
+	otherwise, the base value in the `incidence` column is used.
 ]]
 
 local API = {}
@@ -136,6 +155,7 @@ function API.Drop(eventData)
 		end
 	end
 	
+	local level = eventData.level
 	local encounterId
 	local encounterData
 	
@@ -145,6 +165,8 @@ function API.Drop(eventData)
 		encounterData = activeEncounters[encounterId]
 
 		if encounterData then
+			level = encounterData.level
+			
 			local encounterNPCs = encounterData.npcs
 			local encounterPlayers = encounterData.players
 			
@@ -177,42 +199,62 @@ function API.Drop(eventData)
 	
 	-- Find the correct drop table
 	local lootDropId = eventData.lootId
-	local metadataRow = LDF_DATA[lootDropId]
-	if not metadataRow then
-		error("[LDFactory] No such data for: "..tostring(lootDropId))
-	end
-	local dropTable = metadataRow.subTable
-	if not dropTable then
-		error("[LDFactory] No drop table for: "..tostring(lootDropId))
-	end
+	local metadataRow
+	local dropTable
+	local maxDepth = 5
+	while true do
+		metadataRow = LDF_DATA[lootDropId]
+		if not metadataRow then
+			error("[LDFactory] No such data for: "..tostring(eventData.lootId))
+		end
+		dropTable = metadataRow.subTable
+		if not dropTable then
+			error("[LDFactory] No drop table for: "..tostring(eventData.lootId))
+		end
 	
-	-- Calculate the total incidence
-	local totalIncidence = dropTable.totalIncidence
-	if not totalIncidence then
-		totalIncidence = 0
+		-- Calculate the total incidence
+		local totalIncidence = 0
 		for _,entry in pairs(dropTable) do
-			totalIncidence = totalIncidence + entry.incidence
+			totalIncidence = totalIncidence + GetIncidence(entry, level)
+		end
+		
+		-- Select random row in the table
+		local rng = math.random(totalIncidence)
+		local rewards = nil
+		for _,entry in pairs(dropTable) do
+			local incidence = GetIncidence(entry, level)
+			if rng <= incidence then
+				eventData.rewardId = entry.id
+				rewards = entry.rewards
+				break
+			end
+			rng = rng - incidence
+		end
+	
+		-- There's a chance nothing dropped
+		if rewards == nil or rewards == "" then
+			print("Nothing dropped.")
+			return
+		end
+		
+		-- Check for nested drops, the "LootID()" command
+		local instruction, param = CoreString.Split(rewards, {
+			delimiters = {"(", ")"}, 
+			removeEmptyResults = true
+		})
+		if instruction == "LootID" and param then
+			-- This is not a reward, but a nested drop. Loop and fetch this table
+			lootDropId = param
+		else
+			break -- The value in `rewards` is not a nested drop. Stop search
+		end
+		
+		maxDepth = maxDepth - 1
+		if maxDepth <= 0 then
+			error("[LDFactory] Search depth exceeded for: "..tostring(eventData.lootId))
 		end
 	end
-	
-	-- Select random row in the table
-	local rng = math.random(totalIncidence)
-	local rewards = nil
-	for _,entry in pairs(dropTable) do
-		local incidence = entry.incidence
-		if rng <= incidence then
-			eventData.rewardId = entry.id
-			rewards = entry.rewards
-			break
-		end
-		rng = rng - incidence
-	end
-	
-	-- There's a chance nothing dropped
-	if rewards == nil or rewards == "" then
-		--print("Nothing dropped.")
-		return
-	end
+	eventData.lootId = lootDropId
 	
 	-- Prepare to drop treasure
 	auto_dropId = auto_dropId + 1
@@ -261,7 +303,7 @@ end
 
 
 -- Server only
-function API.RegisterEncounter(encounterNpcs, lootDropId)
+function API.RegisterEncounter(encounterNpcs, lootDropId, level)
 	auto_encounterId = auto_encounterId + 1
 	
 	local encounterData = {}
@@ -269,6 +311,7 @@ function API.RegisterEncounter(encounterNpcs, lootDropId)
 	
 	encounterData.npcs = encounterNpcs
 	encounterData.lootId = lootDropId
+	encounterData.level = level
 	encounterData.players = {}
 	
 	for _,npc in ipairs(encounterNpcs) do
@@ -318,4 +361,15 @@ end
 
 Events.ConnectForPlayer(PICKUP_EVENT_ID, OnPickup)
 
+
+function GetIncidence(entry, level)
+	local incidence = entry.incidence
+	if level and entry.incidencePerLevel then
+		incidence = incidence + level * entry.incidencePerLevel
+	end
+	if incidence < 0 then
+		return 0
+	end
+	return CoreMath.Round(incidence)
+end
 
