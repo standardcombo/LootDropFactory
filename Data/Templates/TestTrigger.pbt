@@ -7,7 +7,7 @@ Assets {
       RootId: 13893670492527206962
       Objects {
         Id: 13893670492527206962
-        Name: "TestTrigger"
+        Name: "TestTrigger (Common)"
         Transform {
           Scale {
             X: 1
@@ -167,9 +167,9 @@ Assets {
           Overrides {
             Name: "ma:Shared_BaseMaterial:color"
             Color {
-              R: 1
+              R: 0.364900589
               G: 1
-              B: 1
+              B: 0.3
               A: 1
             }
           }

@@ -1,6 +1,250 @@
 Name: "Tests"
 RootId: 16333944202873985969
 Objects {
+  Id: 9427809268356125905
+  Name: "TestTrigger (Random)"
+  Transform {
+    Location {
+      X: 400
+      Y: 750
+    }
+    Rotation {
+    }
+    Scale {
+      X: 1
+      Y: 1
+      Z: 1
+    }
+  }
+  ParentId: 16333944202873985969
+  ChildIds: 14054079722215974694
+  ChildIds: 6381668014974428552
+  ChildIds: 14843915411045118388
+  UnregisteredParameters {
+    Overrides {
+      Name: "cs:Trigger"
+      ObjectReference {
+        SelfId: 14054079722215974694
+      }
+    }
+    Overrides {
+      Name: "cs:LootID"
+      String: "Random"
+    }
+    Overrides {
+      Name: "cs:Level"
+      Int: 20
+    }
+  }
+  Collidable_v2 {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  Visible_v2 {
+    Value: "mc:evisibilitysetting:inheritfromparent"
+  }
+  CameraCollidable {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  EditorIndicatorVisibility {
+    Value: "mc:eindicatorvisibility:visiblewhenselected"
+  }
+  Script {
+    ScriptAsset {
+      Id: 14195432242206886827
+    }
+  }
+  InstanceHistory {
+    SelfId: 9427809268356125905
+    SubobjectId: 13893670492527206962
+    InstanceId: 5758334685751440679
+    TemplateId: 1729522406998713033
+    WasRoot: true
+  }
+  NetworkRelevanceDistance {
+    Value: "mc:eproxyrelevance:critical"
+  }
+  IsReplicationEnabledByDefault: true
+}
+Objects {
+  Id: 14843915411045118388
+  Name: "Cube - Bottom-Aligned"
+  Transform {
+    Location {
+    }
+    Rotation {
+    }
+    Scale {
+      X: 2
+      Y: 2
+      Z: 0.05
+    }
+  }
+  ParentId: 9427809268356125905
+  UnregisteredParameters {
+    Overrides {
+      Name: "ma:Shared_BaseMaterial:color"
+      Color {
+        R: 1
+        G: 1
+        B: 1
+        A: 1
+      }
+    }
+  }
+  Collidable_v2 {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  Visible_v2 {
+    Value: "mc:evisibilitysetting:inheritfromparent"
+  }
+  CameraCollidable {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  EditorIndicatorVisibility {
+    Value: "mc:eindicatorvisibility:visiblewhenselected"
+  }
+  CoreMesh {
+    MeshAsset {
+      Id: 8803669985272734817
+    }
+    Teams {
+      IsTeamCollisionEnabled: true
+      IsEnemyCollisionEnabled: true
+    }
+    StaticMesh {
+      Physics {
+        Mass: 100
+        LinearDamping: 0.01
+      }
+      BoundsScale: 1
+    }
+  }
+  InstanceHistory {
+    SelfId: 14843915411045118388
+    SubobjectId: 10089852397961856855
+    InstanceId: 5758334685751440679
+    TemplateId: 1729522406998713033
+  }
+  Relevance {
+    Value: "mc:edistancerelevance:critical"
+  }
+  NetworkRelevanceDistance {
+    Value: "mc:eproxyrelevance:critical"
+  }
+  IsReplicationEnabledByDefault: true
+}
+Objects {
+  Id: 6381668014974428552
+  Name: "World Text"
+  Transform {
+    Location {
+      Z: 6
+    }
+    Rotation {
+      Pitch: 90
+      Yaw: 4.55345935e-06
+      Roll: -179.999969
+    }
+    Scale {
+      X: 1
+      Y: 1
+      Z: 1
+    }
+  }
+  ParentId: 9427809268356125905
+  Collidable_v2 {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  Visible_v2 {
+    Value: "mc:evisibilitysetting:inheritfromparent"
+  }
+  CameraCollidable {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  EditorIndicatorVisibility {
+    Value: "mc:eindicatorvisibility:visiblewhenselected"
+  }
+  Text {
+    Text: "RANDOM!"
+    FontAsset {
+    }
+    Color {
+      A: 1
+    }
+    HorizontalAlignment {
+      Value: "mc:ecoretexthorizontalalign:center"
+    }
+    VerticalAlignment {
+      Value: "mc:ecoretextverticalalign:center"
+    }
+  }
+  InstanceHistory {
+    SelfId: 6381668014974428552
+    SubobjectId: 1915797962847179627
+    InstanceId: 5758334685751440679
+    TemplateId: 1729522406998713033
+  }
+  NetworkRelevanceDistance {
+    Value: "mc:eproxyrelevance:critical"
+  }
+  IsReplicationEnabledByDefault: true
+}
+Objects {
+  Id: 14054079722215974694
+  Name: "Trigger"
+  Transform {
+    Location {
+    }
+    Rotation {
+    }
+    Scale {
+      X: 2
+      Y: 2
+      Z: 1
+    }
+  }
+  ParentId: 9427809268356125905
+  Collidable_v2 {
+    Value: "mc:ecollisionsetting:forceon"
+  }
+  Visible_v2 {
+    Value: "mc:evisibilitysetting:inheritfromparent"
+  }
+  CameraCollidable {
+    Value: "mc:ecollisionsetting:inheritfromparent"
+  }
+  EditorIndicatorVisibility {
+    Value: "mc:eindicatorvisibility:visiblewhenselected"
+  }
+  Trigger {
+    Interactable: true
+    InteractionLabel: "Drop"
+    TeamSettings {
+      IsTeamCollisionEnabled: true
+      IsEnemyCollisionEnabled: true
+    }
+    TriggerShape_v2 {
+      Value: "mc:etriggershape:box"
+    }
+    InteractionTemplate {
+      Id: 841534158063459245
+    }
+    BreadcrumbTemplate {
+      Id: 841534158063459245
+    }
+  }
+  InstanceHistory {
+    SelfId: 14054079722215974694
+    SubobjectId: 9298924071588565445
+    InstanceId: 5758334685751440679
+    TemplateId: 1729522406998713033
+  }
+  NetworkRelevanceDistance {
+    Value: "mc:eproxyrelevance:critical"
+  }
+  IsReplicationEnabledByDefault: true
+}
+Objects {
   Id: 16326726280900993664
   Name: "TestTrigger (Legendary)"
   Transform {
@@ -81,8 +325,8 @@ Objects {
       Name: "ma:Shared_BaseMaterial:color"
       Color {
         R: 1
-        G: 1
-        B: 1
+        G: 0.554039717
+        B: 0.26
         A: 1
       }
     }
@@ -320,8 +564,8 @@ Objects {
     Overrides {
       Name: "ma:Shared_BaseMaterial:color"
       Color {
-        R: 1
-        G: 1
+        R: 0.489232302
+        G: 0.21299994
         B: 1
         A: 1
       }
@@ -560,8 +804,8 @@ Objects {
     Overrides {
       Name: "ma:Shared_BaseMaterial:color"
       Color {
-        R: 1
-        G: 1
+        R: 0.209999979
+        G: 0.544834375
         B: 1
         A: 1
       }
@@ -749,14 +993,6 @@ Objects {
         Overrides {
           Name: "Rotation"
           Rotator {
-          }
-        }
-        Overrides {
-          Name: "Scale"
-          Vector {
-            X: 1
-            Y: 1
-            Z: 1
           }
         }
       }

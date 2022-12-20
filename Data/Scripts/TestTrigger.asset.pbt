@@ -13,6 +13,10 @@ Assets {
         Name: "cs:LootID"
         String: "Common"
       }
+      Overrides {
+        Name: "cs:Level"
+        Int: 0
+      }
     }
   }
   SerializationVersion: 121

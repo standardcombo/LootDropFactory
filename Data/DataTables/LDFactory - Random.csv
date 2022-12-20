@@ -1,0 +1,5 @@
+"id[String]","incidence[Int]","incidencePerLevel[Float]","rewards[String]"
+"Common","60","-2.0","LootID(Common)"
+"Rare","20","0.4","LootID(Rare)"
+"Epic","5","1.0","LootID(Epic)"
+"Legendary","-5","1.0","LootID(Legendary)"
